@@ -1,0 +1,15 @@
+{
+    "key.category.pvpmod": "PvP Mod",
+    "key.pvpmod.zoom": "Zoom",
+    "key.pvpmod.toggle_sprint": "Toggle Sprint",
+    "key.pvpmod.fullbright": "Fullbright",
+    "key.pvpmod.brightness_up": "Brightness Up",
+    "key.pvpmod.brightness_down": "Brightness Down",
+    "key.pvpmod.no_view_bobbing": "Toggle No View Bobbing",
+    "key.pvpmod.no_hurt_tilt": "Toggle No Hurt Tilt",
+    "key.pvpmod.no_nausea": "Toggle No Nausea",
+    "key.pvpmod.no_fov_change": "Toggle No FOV Change",
+    "key.pvpmod.no_fire_overlay": "Toggle No Fire Overlay",
+    "key.pvpmod.no_weather": "Toggle No Weather",
+    "key.pvpmod.hud": "Toggle HUD"
+}

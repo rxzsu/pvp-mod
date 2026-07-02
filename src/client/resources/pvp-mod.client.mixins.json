@@ -1,0 +1,23 @@
+{
+	"required": true,
+	"package": "pvp.mod.client.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"FovModifierMixin",
+		"NoNauseaMixin",
+		"NoFireOverlayMixin",
+		"NoViewBobbingMixin",
+		"NoHurtTiltMixin",
+		"NoWeatherMixin",
+		"FullbrightMixin",
+		"ToggleSprintMixin",
+		"ZoomMixin",
+		"HudMixin"
+	],
+	"injectors": {
+		"defaultRequire": 0
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

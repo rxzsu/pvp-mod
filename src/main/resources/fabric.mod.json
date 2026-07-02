@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "pvp-mod",
+	"version": "${version}",
+	"name": "PvP Mod",
+	"description": "A client-side PvP utility mod with Fullbright, Toggle Sprint, No Nausea, No Fire Overlay, No Weather, No View Bobbing, Zoom, HUD overlay and more.",
+	"authors": [
+		"reqwai"
+	],
+	"contact": {
+		"sources": "https://github.com/FUXKVOB/pvp-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/pvp-mod/icon.webp",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"pvp.mod.PvpMod"
+		],
+		"client": [
+			"pvp.mod.client.PvpModClient"
+		],
+		"modmenu": [
+			"pvp.mod.client.config.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"pvp-mod.mixins.json",
+		{
+			"config": "pvp-mod.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.0",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-language-kotlin": ">=1.13.0"
+	},
+	"suggests": {
+		"modmenu": ">=17.0.0"
+	}
+}
