@@ -15,10 +15,13 @@ data class Config(
         "noFireOverlay" to true,
         "noWeather" to true,
         "noViewBobbing" to true,
+        "noPumpkin" to false,
+        "noVignette" to false,
         "fullbright" to false,
         "toggleSprint" to false,
         "hud" to true,
-        "keystrokes" to false
+        "keystrokes" to false,
+        "statusHud" to true
     ),
     var zoomSensitivity: Double = 0.2,
     // Позиция Keystrokes: отступ от правого/верхнего края экрана

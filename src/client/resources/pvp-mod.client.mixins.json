@@ -4,6 +4,8 @@
 	"compatibilityLevel": "JAVA_21",
 	"client": [
 		"MouseHandlerMixin",
+		"NoPumpkinMixin",
+		"NoVignetteMixin",
 		"FovModifierMixin",
 		"NoNauseaMixin",
 		"NoFireOverlayMixin",
