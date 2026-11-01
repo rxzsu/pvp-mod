@@ -23,7 +23,11 @@ data class Config(
     var zoomSensitivity: Double = 0.2,
     // Позиция Keystrokes: отступ от правого/верхнего края экрана
     var keystrokesOffsetX: Int = 6,
-    var keystrokesOffsetY: Int = 6
+    var keystrokesOffsetY: Int = 6,
+    // Блюр фона под Click GUI
+    var menuBlur: Boolean = true,
+    // Свой gaussian-шейдер вместо ванильного box blur
+    var fancyBlur: Boolean = true
 ) {
     companion object {
         private val gson = GsonBuilder().setPrettyPrinting().create()
@@ -40,7 +44,11 @@ data class Config(
                 val root = gson.fromJson(json, JsonObject::class.java)
                 instance = if (root.has("modules")) {
                     // Новая схема (2.0+)
-                    gson.fromJson(json, Config::class.java)
+                    val cfg = gson.fromJson(json, Config::class.java)
+                    // Gson не применяет дефолты Kotlin - проставляем новые поля явно
+                    if (!root.has("menuBlur")) cfg.menuBlur = true
+                    if (!root.has("fancyBlur")) cfg.fancyBlur = true
+                    cfg
                 } else {
                     // Миграция со схемы 1.x (плоские булевы поля)
                     migrateLegacy(gson.fromJson(json, Legacy::class.java))

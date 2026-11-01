@@ -17,6 +17,7 @@ WASD, пробел и CPS мыши (ЛКМ/ПКМ) в углу экрана — 
 - 🚫 **No FOV Change** / 🤢 **No Nausea** / 💥 **No Hurt Tilt**
 - 🔥 **No Fire Overlay** (вода не трогается) / 🌧️ **No Weather** / 🚶 **No View Bobbing**
 - 📊 **HUD** — координаты, FPS и пинг
+- 🌫️ **Blur в Click GUI** — размытие мира позади меню, включая собственный gaussian-шейдер (`menuBlur`/`fancyBlur` в конфиге)
 - ⌨️ **Keystrokes** — см. выше
 
 ## Хоткеи (по умолчанию)
@@ -63,7 +64,9 @@ WASD, пробел и CPS мыши (ЛКМ/ПКМ) в углу экрана — 
   },
   "zoomSensitivity": 0.2,
   "keystrokesOffsetX": 6,
-  "keystrokesOffsetY": 6
+  "keystrokesOffsetY": 6,
+  "menuBlur": true,
+  "fancyBlur": true
 }
 ```
 
