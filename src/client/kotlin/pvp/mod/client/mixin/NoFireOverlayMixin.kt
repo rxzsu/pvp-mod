@@ -1,19 +1,22 @@
 package pvp.mod.client.mixin
 
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.renderer.ScreenEffectRenderer
-import net.minecraft.client.renderer.SubmitNodeCollector
 import pvp.mod.client.config.Config
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.injection.At
-import org.spongepowered.asm.mixin.injection.Inject
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+import org.spongepowered.asm.mixin.injection.Redirect
 
 @Mixin(ScreenEffectRenderer::class)
 abstract class NoFireOverlayMixin {
-    @Inject(method = ["renderScreenEffect"], at = [At("HEAD")], cancellable = true)
-    private fun onRenderScreenEffect(renderFire: Boolean, alpha: Float, collector: SubmitNodeCollector, ci: CallbackInfo) {
-        if (Config.get().noFireOverlay) {
-            ci.cancel()
-        }
+    // В 26.2 огонь рисуется внутри submit(); глушим только вызов isOnFire(),
+    // чтобы не трогать оверлеи воды и блока
+    @Redirect(
+        method = ["submit"],
+        at = At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isOnFire()Z")
+    )
+    private fun redirectIsOnFire(instance: LocalPlayer): Boolean {
+        if (Config.get().noFireOverlay) return false
+        return instance.isOnFire()
     }
 }

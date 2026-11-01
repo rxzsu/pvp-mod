@@ -3,7 +3,7 @@ package pvp.mod.client.config
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.KeyEvent
@@ -52,7 +52,7 @@ class ConfigScreen(private val parent: Screen?) : Screen(Component.literal("PvP 
             Button.builder(Component.literal("Done"), {
                 saveOptions()
                 Config.save()
-                minecraft?.screen = parent
+                parent?.let { minecraft.setScreenAndShow(it) }
             }).bounds(centerX - 50, y, 100, 20).build()
         )
     }
@@ -148,11 +148,11 @@ class ConfigScreen(private val parent: Screen?) : Screen(Component.literal("PvP 
         Minecraft.getInstance().options.save()
     }
 
-    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, tickDelta: Float) {
-        super.render(guiGraphics, mouseX, mouseY, tickDelta)
-        guiGraphics.drawCenteredString(font, title, width / 2, 15, 0xFFFFFF)
+    override fun extractRenderState(extractor: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, tickDelta: Float) {
+        super.extractRenderState(extractor, mouseX, mouseY, tickDelta)
+        extractor.centeredText(font, title, width / 2, 15, 0xFFFFFF)
         if (listeningKeyId != null) {
-            guiGraphics.drawCenteredString(font, "Press a key or ESC to cancel", width / 2, height - 20, 0xFFFF55)
+            extractor.centeredText(font, "Press a key or ESC to cancel", width / 2, height - 20, 0xFFFF55)
         }
     }
 

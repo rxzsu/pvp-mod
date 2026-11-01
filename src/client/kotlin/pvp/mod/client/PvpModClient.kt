@@ -3,7 +3,7 @@ package pvp.mod.client
 import com.mojang.blaze3d.platform.InputConstants
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.Minecraft
 import net.minecraft.client.Options
@@ -37,7 +37,7 @@ class PvpModClient : ClientModInitializer {
 
         fun reg(id: String, default: Int): KeyMapping {
             val km = KeyMapping(id, InputConstants.Type.KEYSYM, default, KeyMapping.Category.MISC)
-            KeyBindingHelper.registerKeyBinding(km)
+            KeyMappingHelper.registerKeyMapping(km)
             return km
         }
 
@@ -69,7 +69,7 @@ class PvpModClient : ClientModInitializer {
             Config.get().toggleSprint = ToggleSprintHandler.enabled
             Config.save()
             val msg = if (ToggleSprintHandler.enabled) "§aToggle Sprint ON" else "§cToggle Sprint OFF"
-            client.player?.displayClientMessage(Component.literal(msg), true)
+            client.player?.sendOverlayMessage(Component.literal(msg))
         }
 
         if (fullbrightKey.consumeClick()) {
@@ -77,7 +77,7 @@ class PvpModClient : ClientModInitializer {
             Config.get().fullbright = FullbrightHandler.enabled
             Config.save()
             val msg = if (FullbrightHandler.enabled) "§aFullbright ON" else "§cFullbright OFF"
-            client.player?.displayClientMessage(Component.literal(msg), true)
+            client.player?.sendOverlayMessage(Component.literal(msg))
         }
 
         toggleConfig(client, noViewBobbingKey, "No View Bobbing", { Config.get().noViewBobbing }, { Config.get().noViewBobbing = it })
@@ -91,16 +91,16 @@ class PvpModClient : ClientModInitializer {
         if (brightnessUpKey.consumeClick()) {
             val gamma = client.options.gamma().get()
             client.options.gamma().set((gamma + 0.25).coerceAtMost(1.0))
-            client.player?.displayClientMessage(
-                Component.literal("§7Brightness: §e${(client.options.gamma().get() * 100).toInt()}%"), true
+            client.player?.sendOverlayMessage(
+                Component.literal("§7Brightness: §e${(client.options.gamma().get() * 100).toInt()}%")
             )
         }
 
         if (brightnessDownKey.consumeClick()) {
             val gamma = client.options.gamma().get()
             client.options.gamma().set((gamma - 0.25).coerceAtLeast(0.0))
-            client.player?.displayClientMessage(
-                Component.literal("§7Brightness: §e${(client.options.gamma().get() * 100).toInt()}%"), true
+            client.player?.sendOverlayMessage(
+                Component.literal("§7Brightness: §e${(client.options.gamma().get() * 100).toInt()}%")
             )
         }
 
@@ -113,7 +113,7 @@ class PvpModClient : ClientModInitializer {
             set(newVal)
             Config.save()
             val msg = if (newVal) "§a$name ON" else "§c$name OFF"
-            client.player?.displayClientMessage(Component.literal(msg), true)
+            client.player?.sendOverlayMessage(Component.literal(msg))
         }
     }
 }

@@ -1,6 +1,6 @@
 plugins {
 	id("net.fabricmc.fabric-loom-remap")
-	kotlin("jvm") version "2.1.0"
+	kotlin("jvm") version "2.4.21"
 	`maven-publish`
 	id("com.modrinth.minotaur") version "2.8.7"
 }
@@ -15,6 +15,8 @@ repositories {
 loom {
 	splitEnvironmentSourceSets()
 
+	noIntermediateMappings()
+
 	mods {
 		register("pvp-mod") {
 			sourceSet(sourceSets.main.get())
@@ -23,10 +25,17 @@ loom {
 	}
 }
 
+// С identity-маппингами нет intermediary-неймспейса — ремапить sources нечем
+tasks.remapSourcesJar {
+	enabled = false
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
-    mappings(loom.officialMojangMappings())
+    mappings(loom.layered {
+        mappings(file("identity-mappings/mappings.tiny"))
+    })
 	modImplementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
@@ -37,7 +46,7 @@ dependencies {
 	include("net.fabricmc:fabric-language-kotlin:${providers.gradleProperty("fabric_language_kotlin_version").get()}")
 
 	// ModMenu (опционально)
-	modCompileOnly("com.terraformersmc:modmenu:17.0.0")
+	modCompileOnly("com.terraformersmc:modmenu:20.0.3")
 }
 
 tasks.processResources {
@@ -50,7 +59,7 @@ tasks.processResources {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-	options.release = 21
+	options.release = 25
 }
 
 java {
@@ -59,8 +68,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 tasks.jar {
@@ -78,7 +87,7 @@ modrinth {
 	versionNumber.set("${version}")
 	versionName.set("PvP Mod ${version}")
 	uploadFile.set(tasks.remapJar.get())
-	gameVersions.add("1.21.11")
+	gameVersions.add(providers.gradleProperty("minecraft_version").get())
 	loaders.add("fabric")
 	dependencies {
 		required.project("fabric-api")
