@@ -34,9 +34,12 @@ class PvpModClient : ClientModInitializer {
 
         FullbrightHandler.loadFromConfig(Config.get().fullbright)
         ToggleSprintHandler.loadFromConfig(Config.get().toggleSprint)
+        ZoomHandler.multiplier = Config.get().zoomSensitivity
+
+        val category = KeyMapping.Category.register(PvpMod.id("main"))
 
         fun reg(id: String, default: Int): KeyMapping {
-            val km = KeyMapping(id, InputConstants.Type.KEYSYM, default, KeyMapping.Category.MISC)
+            val km = KeyMapping(id, InputConstants.Type.KEYSYM, default, category)
             KeyMappingHelper.registerKeyMapping(km)
             return km
         }
