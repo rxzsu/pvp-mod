@@ -57,7 +57,7 @@ class ClickGui(parent: Screen?) : Screen(Component.literal("PvP Mod")) {
         val pad = 8
         val totalW = colWidth * 2 + 30
 
-        extractor.centeredText(font, "§fPvP Mod §7Click GUI", width / 2, 24, 0xFFFFFFFF)
+        extractor.centeredText(font, "§fPvP Mod §7Click GUI", width / 2, 24, 0xFFFFFFFF.toInt())
 
         val newRows = mutableListOf<Row>()
         var px = width / 2 - totalW / 2
@@ -78,11 +78,11 @@ class ClickGui(parent: Screen?) : Screen(Component.literal("PvP Mod")) {
                 extractor.fill(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h, if (hovered) rowHoverBg else rowBg)
 
                 extractor.text(font, "${if (m.enabled) "§a" else "§7"}${m.name}",
-                    rect.x + 5, rect.y + (rowH - font.lineHeight) / 2, 0xFFFFFFFF)
+                    rect.x + 5, rect.y + (rowH - font.lineHeight) / 2, 0xFFFFFFFF.toInt())
                 m.keybind?.let { km ->
                     val key = km.getTranslatedKeyMessage().string
                     extractor.text(font, key, rect.x + rect.w - 5 - font.width(key),
-                        rect.y + (rowH - font.lineHeight) / 2, 0xFF909090)
+                        rect.y + (rowH - font.lineHeight) / 2, 0xFF909090.toInt())
                 }
 
                 newRows.add(Row(m, rect))
@@ -100,7 +100,7 @@ class ClickGui(parent: Screen?) : Screen(Component.literal("PvP Mod")) {
         extractor.fill(close.x, close.y, close.x + close.w, close.y + close.h,
             if (close.hit(mouseX, mouseY)) 0x6000B34C.toInt() else 0x5000B34C.toInt())
         extractor.outline(close.x, close.y, close.x + close.w, close.y + close.h, accent)
-        extractor.centeredText(font, "Close (Esc)", width / 2, close.y + (20 - font.lineHeight) / 2, 0xFFFFFFFF)
+        extractor.centeredText(font, "Close (Esc)", width / 2, close.y + (20 - font.lineHeight) / 2, 0xFFFFFFFF.toInt())
         closeRect = close
     }
 
