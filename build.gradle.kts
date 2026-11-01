@@ -15,7 +15,6 @@ repositories {
 loom {
 	splitEnvironmentSourceSets()
 
-	noIntermediateMappings()
 
 	mods {
 		register("pvp-mod") {

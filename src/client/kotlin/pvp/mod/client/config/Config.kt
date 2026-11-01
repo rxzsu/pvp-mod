@@ -41,6 +41,7 @@ data class Config(
         fun save(config: Config = instance) {
             instance = config
             try {
+                getConfigFile().parentFile.mkdirs()
                 getConfigFile().writeText(gson.toJson(config))
             } catch (e: Exception) {
                 PvpMod.LOGGER.error("Failed to save config", e)

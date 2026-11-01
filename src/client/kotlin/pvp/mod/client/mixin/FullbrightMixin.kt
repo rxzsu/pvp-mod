@@ -1,22 +1,23 @@
 package pvp.mod.client.mixin
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation
 import net.minecraft.client.Minecraft
 import net.minecraft.client.OptionInstance
 import net.minecraft.client.renderer.LightmapRenderStateExtractor
+import org.spongepowered.asm.mixin.injection.At
 import pvp.mod.client.handler.FullbrightHandler
 import org.spongepowered.asm.mixin.Mixin
-import org.spongepowered.asm.mixin.injection.At
-import org.spongepowered.asm.mixin.injection.Redirect
 
 @Mixin(LightmapRenderStateExtractor::class)
 abstract class FullbrightMixin {
-    @Redirect(
+    // extract() вызывает OptionInstance.get() дважды (hideLightningFlash и gamma) - трогаем только гамму
+    @WrapOperation(
         method = ["extract"],
-        at = At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;")
+        at = [At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;")]
     )
-    private fun redirectGamma(instance: OptionInstance<*>): Any {
-        // extract() вызывает OptionInstance.get() дважды (hideLightningFlash и gamma) - трогаем только гамму
+    private fun redirectGamma(instance: OptionInstance<*>, original: Operation<*>): Any {
         if (FullbrightHandler.enabled && instance === Minecraft.getInstance().options.gamma()) return 16.0
-        return instance.get()
+        return original.call(instance)
     }
 }
