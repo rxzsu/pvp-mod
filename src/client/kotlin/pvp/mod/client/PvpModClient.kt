@@ -10,14 +10,13 @@ import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
 import pvp.mod.PvpMod
 import pvp.mod.client.config.Config
-import pvp.mod.client.gui.ClickGui
+import pvp.mod.client.config.ConfigScreen
 import pvp.mod.client.handler.ZoomHandler
 import pvp.mod.client.modules.Module
 import pvp.mod.client.modules.ModuleManager
 import pvp.mod.client.modules.Modules
 
 class PvpModClient : ClientModInitializer {
-    lateinit var clickGuiKey: KeyMapping
     lateinit var zoomKey: KeyMapping
     lateinit var toggleSprintKey: KeyMapping
     lateinit var fullbrightKey: KeyMapping
@@ -43,7 +42,6 @@ class PvpModClient : ClientModInitializer {
             return km
         }
 
-        clickGuiKey = reg("key.pvpmod.clickgui", GLFW.GLFW_KEY_RIGHT_SHIFT)
         zoomKey = reg("key.pvpmod.zoom", GLFW.GLFW_KEY_V)
         toggleSprintKey = reg("key.pvpmod.toggle_sprint", GLFW.GLFW_KEY_R)
         fullbrightKey = reg("key.pvpmod.fullbright", GLFW.GLFW_KEY_F)
@@ -76,11 +74,6 @@ class PvpModClient : ClientModInitializer {
 
     private fun handleTick(client: Minecraft) {
         ZoomHandler.isZooming = zoomKey.isDown
-
-        if (clickGuiKey.consumeClick()) {
-            client.setScreenAndShow(ClickGui(null))
-            return
-        }
 
         toggle(client, toggleSprintKey, Modules.toggleSprint)
         toggle(client, fullbrightKey, Modules.fullbright)

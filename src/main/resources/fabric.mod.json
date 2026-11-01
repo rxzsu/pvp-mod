@@ -3,7 +3,7 @@
 	"id": "pvp-mod",
 	"version": "${version}",
 	"name": "PvP Mod",
-	"description": "Client-side PvP utility mod: Click GUI, Keystrokes HUD, Fullbright, Toggle Sprint, Zoom, effect/overlay removals, coords/FPS/ping HUD.",
+	"description": "Client-side PvP utility mod: Keystrokes HUD, Fullbright, Toggle Sprint, Zoom, effect/overlay removals, coords/FPS/ping HUD. Configured via ModMenu.",
 	"authors": [
 		"reqwai"
 	],
