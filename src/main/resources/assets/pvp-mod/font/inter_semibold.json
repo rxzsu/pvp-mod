@@ -2,7 +2,7 @@
   "providers": [
     {
       "type": "ttf",
-      "file": "pvp-mod:font/inter_semibold.ttf",
+      "file": "pvp-mod:inter_semibold.ttf",
       "shift": [
         0.0,
         1.0
