@@ -24,8 +24,8 @@ abstract class HudMixin {
         val coords = "X: ${pos.x} Y: ${pos.y} Z: ${pos.z}"
         val ping = player.connection.getPlayerInfo(player.uuid)?.latency ?: 0
 
-        extractor.text(client.font, coords, 4, 4, 0xFFFFFF, true)
-        extractor.text(client.font, "FPS: ${client.fps}  Ping: ${ping}ms", 4, 14, 0xFFFFFF, true)
+        extractor.text(client.font, coords, 4, 4, 0xFFFFFFFF, true)
+        extractor.text(client.font, "FPS: ${client.fps}  Ping: ${ping}ms", 4, 14, 0xFFFFFFFF, true)
 
         if (Modules.keystrokes.enabled) {
             KeystrokesRenderer.render(extractor)
