@@ -3,11 +3,6 @@
 	"package": "pvp.mod.client.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"FontManagerAccessor",
-		"GuiGraphicsExtractorAccessor",
-		"RenderPipelinesAccessor",
-		"GameRendererMixin",
-		"MinecraftAccessor",
 		"MouseHandlerMixin",
 		"FovModifierMixin",
 		"NoNauseaMixin",
