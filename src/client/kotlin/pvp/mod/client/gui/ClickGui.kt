@@ -58,6 +58,8 @@ class ClickGui(parent: Screen?) : Screen(Component.literal("PvP Mod")) {
     }
 
     override fun onClose() {
-        parent?.let { minecraft.setScreenAndShow(it) }
+        // Экраны в 26.2 живут в Minecraft.gui; Gui.setScreen принимает null,
+        // поэтому закрытие работает и когда parent == null (открыто из игры)
+        minecraft.gui.setScreen(parent)
     }
 }
