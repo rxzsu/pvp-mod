@@ -3,7 +3,7 @@
 	"id": "pvp-mod",
 	"version": "${version}",
 	"name": "PvP Mod",
-	"description": "A client-side PvP utility mod with Fullbright, Toggle Sprint, No Nausea, No Fire Overlay, No Weather, No View Bobbing, Zoom, HUD overlay and more.",
+	"description": "Client-side PvP utility mod: Click GUI, Keystrokes HUD, Fullbright, Toggle Sprint, Zoom, effect/overlay removals, coords/FPS/ping HUD.",
 	"authors": [
 		"reqwai"
 	],

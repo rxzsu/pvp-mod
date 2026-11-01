@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.OptionInstance
 import net.minecraft.client.renderer.LightmapRenderStateExtractor
 import org.spongepowered.asm.mixin.injection.At
-import pvp.mod.client.handler.FullbrightHandler
+import pvp.mod.client.modules.Modules
 import org.spongepowered.asm.mixin.Mixin
 
 @Mixin(LightmapRenderStateExtractor::class)
@@ -17,7 +17,7 @@ abstract class FullbrightMixin {
         at = [At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;")]
     )
     private fun redirectGamma(instance: OptionInstance<*>, original: Operation<*>): Any {
-        if (FullbrightHandler.enabled && instance === Minecraft.getInstance().options.gamma()) return 16.0
+        if (Modules.fullbright.enabled && instance === Minecraft.getInstance().options.gamma()) return 16.0
         return original.call(instance)
     }
 }

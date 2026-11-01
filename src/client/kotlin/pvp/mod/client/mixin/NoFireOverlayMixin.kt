@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.renderer.ScreenEffectRenderer
-import pvp.mod.client.config.Config
+import pvp.mod.client.modules.Modules
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.injection.At
 
@@ -17,7 +17,7 @@ abstract class NoFireOverlayMixin {
         at = [At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isOnFire()Z")]
     )
     private fun redirectIsOnFire(instance: LocalPlayer, original: Operation<Boolean>): Boolean {
-        if (Config.get().noFireOverlay) return false
+        if (Modules.noFireOverlay.enabled) return false
         return original.call(instance)
     }
 }

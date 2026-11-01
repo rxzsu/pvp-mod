@@ -1,7 +1,7 @@
 package pvp.mod.client.mixin
 
 import net.minecraft.client.Camera
-import pvp.mod.client.config.Config
+import pvp.mod.client.modules.Modules
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.Shadow
 import org.spongepowered.asm.mixin.injection.At
@@ -18,7 +18,7 @@ abstract class FovModifierMixin {
 
     @Inject(method = ["tickFov"], at = [At("HEAD")], cancellable = true)
     private fun onTickFov(ci: CallbackInfo) {
-        if (Config.get().noFovChange) {
+        if (Modules.noFovChange.enabled) {
             oldFovModifier = 1.0f
             fovModifier = 1.0f
             ci.cancel()

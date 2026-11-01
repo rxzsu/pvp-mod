@@ -1,7 +1,7 @@
 package pvp.mod.client.mixin
 
 import net.minecraft.client.renderer.GameRenderer
-import pvp.mod.client.config.Config
+import pvp.mod.client.modules.Modules
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.Shadow
 import org.spongepowered.asm.mixin.injection.At
@@ -18,7 +18,7 @@ abstract class NoNauseaMixin {
 
     @Inject(method = ["tick"], at = [At("RETURN")])
     private fun onTick(ci: CallbackInfo) {
-        if (Config.get().noNausea) {
+        if (Modules.noNausea.enabled) {
             spinningEffectTime = 0.0f
             spinningEffectSpeed = 0.0f
         }

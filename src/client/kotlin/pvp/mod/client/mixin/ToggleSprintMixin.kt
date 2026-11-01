@@ -1,7 +1,7 @@
 package pvp.mod.client.mixin
 
 import net.minecraft.client.player.LocalPlayer
-import pvp.mod.client.handler.ToggleSprintHandler
+import pvp.mod.client.modules.Modules
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
@@ -14,7 +14,7 @@ abstract class ToggleSprintMixin {
     @Suppress("USELESS_CAST")
     @Inject(method = ["aiStep"], at = [At("RETURN")])
     private fun onAiStep(ci: CallbackInfo) {
-        if (!ToggleSprintHandler.enabled) return
+        if (!Modules.toggleSprint.enabled) return
 
         val self = this as LocalPlayer
         if (self.input.hasForwardImpulse() && !self.isSprinting && !self.input.keyPresses.shift()) {

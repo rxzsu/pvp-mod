@@ -4,7 +4,8 @@ import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.Hud
-import pvp.mod.client.config.Config
+import pvp.mod.client.modules.KeystrokesRenderer
+import pvp.mod.client.modules.Modules
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 abstract class HudMixin {
     @Inject(method = ["extractRenderState"], at = [At("RETURN")])
     private fun onExtractRenderState(extractor: GuiGraphicsExtractor, deltaTracker: DeltaTracker, ci: CallbackInfo) {
-        if (!Config.get().hudEnabled) return
+        if (!Modules.hud.enabled) return
 
         val client = Minecraft.getInstance()
         val player = client.player ?: return
@@ -25,5 +26,9 @@ abstract class HudMixin {
 
         extractor.text(client.font, coords, 4, 4, 0xFFFFFF, true)
         extractor.text(client.font, "FPS: ${client.fps}  Ping: ${ping}ms", 4, 14, 0xFFFFFF, true)
+
+        if (Modules.keystrokes.enabled) {
+            KeystrokesRenderer.render(extractor)
+        }
     }
 }

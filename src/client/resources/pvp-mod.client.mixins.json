@@ -3,6 +3,7 @@
 	"package": "pvp.mod.client.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
+		"MouseHandlerMixin",
 		"FovModifierMixin",
 		"NoNauseaMixin",
 		"NoFireOverlayMixin",

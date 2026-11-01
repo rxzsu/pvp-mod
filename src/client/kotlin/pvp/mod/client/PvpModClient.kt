@@ -6,16 +6,18 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.Minecraft
-import net.minecraft.client.Options
 import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
 import pvp.mod.PvpMod
 import pvp.mod.client.config.Config
-import pvp.mod.client.handler.FullbrightHandler
-import pvp.mod.client.handler.ToggleSprintHandler
+import pvp.mod.client.gui.ClickGui
 import pvp.mod.client.handler.ZoomHandler
+import pvp.mod.client.modules.Module
+import pvp.mod.client.modules.ModuleManager
+import pvp.mod.client.modules.Modules
 
 class PvpModClient : ClientModInitializer {
+    lateinit var clickGuiKey: KeyMapping
     lateinit var zoomKey: KeyMapping
     lateinit var toggleSprintKey: KeyMapping
     lateinit var fullbrightKey: KeyMapping
@@ -31,19 +33,17 @@ class PvpModClient : ClientModInitializer {
 
     override fun onInitializeClient() {
         Config.load()
-
-        FullbrightHandler.loadFromConfig(Config.get().fullbright)
-        ToggleSprintHandler.loadFromConfig(Config.get().toggleSprint)
+        Modules.init()
+        ModuleManager.applyConfig()
         ZoomHandler.multiplier = Config.get().zoomSensitivity
 
-        val category = KeyMapping.Category.register(PvpMod.id("main"))
-
         fun reg(id: String, default: Int): KeyMapping {
-            val km = KeyMapping(id, InputConstants.Type.KEYSYM, default, category)
+            val km = KeyMapping(id, InputConstants.Type.KEYSYM, default, KeyMapping.Category.MISC)
             KeyMappingHelper.registerKeyMapping(km)
             return km
         }
 
+        clickGuiKey = reg("key.pvpmod.clickgui", GLFW.GLFW_KEY_RIGHT_SHIFT)
         zoomKey = reg("key.pvpmod.zoom", GLFW.GLFW_KEY_V)
         toggleSprintKey = reg("key.pvpmod.toggle_sprint", GLFW.GLFW_KEY_R)
         fullbrightKey = reg("key.pvpmod.fullbright", GLFW.GLFW_KEY_F)
@@ -57,6 +57,16 @@ class PvpModClient : ClientModInitializer {
         noWeatherKey = reg("key.pvpmod.no_weather", GLFW.GLFW_KEY_K)
         hudKey = reg("key.pvpmod.hud", GLFW.GLFW_KEY_J)
 
+        Modules.fullbright.keybind = fullbrightKey
+        Modules.toggleSprint.keybind = toggleSprintKey
+        Modules.hud.keybind = hudKey
+        Modules.noViewBobbing.keybind = noViewBobbingKey
+        Modules.noHurtTilt.keybind = noHurtTiltKey
+        Modules.noNausea.keybind = noNauseaKey
+        Modules.noFovChange.keybind = noFovChangeKey
+        Modules.noFireOverlay.keybind = noFireOverlayKey
+        Modules.noWeather.keybind = noWeatherKey
+
         ClientTickEvents.END_CLIENT_TICK.register { client ->
             handleTick(client)
         }
@@ -67,29 +77,20 @@ class PvpModClient : ClientModInitializer {
     private fun handleTick(client: Minecraft) {
         ZoomHandler.isZooming = zoomKey.isDown
 
-        if (toggleSprintKey.consumeClick()) {
-            ToggleSprintHandler.toggle()
-            Config.get().toggleSprint = ToggleSprintHandler.enabled
-            Config.save()
-            val msg = if (ToggleSprintHandler.enabled) "§aToggle Sprint ON" else "§cToggle Sprint OFF"
-            client.player?.sendOverlayMessage(Component.literal(msg))
+        if (clickGuiKey.consumeClick()) {
+            client.setScreenAndShow(ClickGui(null))
+            return
         }
 
-        if (fullbrightKey.consumeClick()) {
-            FullbrightHandler.toggle()
-            Config.get().fullbright = FullbrightHandler.enabled
-            Config.save()
-            val msg = if (FullbrightHandler.enabled) "§aFullbright ON" else "§cFullbright OFF"
-            client.player?.sendOverlayMessage(Component.literal(msg))
-        }
-
-        toggleConfig(client, noViewBobbingKey, "No View Bobbing", { Config.get().noViewBobbing }, { Config.get().noViewBobbing = it })
-        toggleConfig(client, noHurtTiltKey, "No Hurt Tilt", { Config.get().noHurtTilt }, { Config.get().noHurtTilt = it })
-        toggleConfig(client, noNauseaKey, "No Nausea", { Config.get().noNausea }, { Config.get().noNausea = it })
-        toggleConfig(client, noFovChangeKey, "No FOV Change", { Config.get().noFovChange }, { Config.get().noFovChange = it })
-        toggleConfig(client, noFireOverlayKey, "No Fire Overlay", { Config.get().noFireOverlay }, { Config.get().noFireOverlay = it })
-        toggleConfig(client, noWeatherKey, "No Weather", { Config.get().noWeather }, { Config.get().noWeather = it })
-        toggleConfig(client, hudKey, "HUD", { Config.get().hudEnabled }, { Config.get().hudEnabled = it })
+        toggle(client, toggleSprintKey, Modules.toggleSprint)
+        toggle(client, fullbrightKey, Modules.fullbright)
+        toggle(client, noViewBobbingKey, Modules.noViewBobbing)
+        toggle(client, noHurtTiltKey, Modules.noHurtTilt)
+        toggle(client, noNauseaKey, Modules.noNausea)
+        toggle(client, noFovChangeKey, Modules.noFovChange)
+        toggle(client, noFireOverlayKey, Modules.noFireOverlay)
+        toggle(client, noWeatherKey, Modules.noWeather)
+        toggle(client, hudKey, Modules.hud)
 
         if (brightnessUpKey.consumeClick()) {
             val gamma = client.options.gamma().get()
@@ -110,12 +111,10 @@ class PvpModClient : ClientModInitializer {
         ZoomHandler.tick()
     }
 
-    private fun toggleConfig(client: Minecraft, key: KeyMapping, name: String, get: () -> Boolean, set: (Boolean) -> Unit) {
+    private fun toggle(client: Minecraft, key: KeyMapping, module: Module) {
         if (key.consumeClick()) {
-            val newVal = !get()
-            set(newVal)
-            Config.save()
-            val msg = if (newVal) "§a$name ON" else "§c$name OFF"
+            module.toggle()
+            val msg = if (module.enabled) "§a${module.name} ON" else "§c${module.name} OFF"
             client.player?.sendOverlayMessage(Component.literal(msg))
         }
     }
