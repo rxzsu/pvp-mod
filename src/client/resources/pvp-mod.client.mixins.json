@@ -6,6 +6,7 @@
 		"MouseHandlerMixin",
 		"NoPumpkinMixin",
 		"NoVignetteMixin",
+		"NoPortalOverlayMixin",
 		"FovModifierMixin",
 		"NoNauseaMixin",
 		"NoFireOverlayMixin",

@@ -23,11 +23,27 @@ abstract class HudMixin {
         val player = client.player ?: return
 
         val pos = player.blockPosition()
-        val coords = "X: ${pos.x} Y: ${pos.y} Z: ${pos.z}"
+        val yawNorm = (player.yRot % 360f + 360f) % 360f
+        val dir = arrayOf("S", "W", "N", "E")[(yawNorm / 90f + 0.5f).toInt() % 4]
         val ping = player.connection.getPlayerInfo(player.uuid)?.latency ?: 0
+        val fpsCol = when {
+            client.fps > 100 -> 0xFF55FF55.toInt()
+            client.fps > 60 -> 0xFFFFFFFF.toInt()
+            client.fps > 30 -> 0xFFFFFF55.toInt()
+            else -> 0xFFFF5555.toInt()
+        }
+        val pingCol = when {
+            ping < 100 -> 0xFFFFFFFF.toInt()
+            ping < 200 -> 0xFFFFFF55.toInt()
+            else -> 0xFFFF5555.toInt()
+        }
+        val dm = player.deltaMovement
+        val speed = kotlin.math.sqrt(dm.x * dm.x + dm.z * dm.z) * 20.0
 
-        extractor.text(client.font, coords, 4, 4, 0xFFFFFFFF.toInt(), true)
-        extractor.text(client.font, "FPS: ${client.fps}  Ping: ${ping}ms", 4, 14, 0xFFFFFFFF.toInt(), true)
+        extractor.text(client.font, "X: ${pos.x} Y: ${pos.y} Z: ${pos.z} §7[$dir]", 4, 4, 0xFFFFFFFF.toInt(), true)
+        extractor.text(client.font, "FPS: ${client.fps}", 4, 14, fpsCol, true)
+        extractor.text(client.font, "§7Ping: §f${ping}ms", 78, 14, pingCol, true)
+        extractor.text(client.font, "§7%.1f m/s".format(speed), 160, 14, 0xFFFFFFFF.toInt(), true)
 
         if (Modules.keystrokes.enabled) {
             KeystrokesRenderer.render(extractor)
